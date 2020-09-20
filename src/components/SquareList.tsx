@@ -5,17 +5,19 @@ export type ISquareList = {
   emojis: IEmojiSquare[];
 };
 
-const SquareList = ({ emojis }: ISquareList) => {
+const SquareList = ( {emojis,onClick}:{emojis:IEmojiSquare[],onClick:(e:any)=>any}) => {
+  console.log(onClick)
   return (
     <>
       {emojis.map((emoji, index) => {
+        const emojiSquareProps = {
+          emoji:emoji,
+          onClick:onClick,
+        }
         return (
           <EmojiSquare
-            value={emoji.value}
+            {...emojiSquareProps}
             key={index}
-            hidden={emoji.hidden}
-            onClick={emoji.onClick}
-            id={emoji.id}
           ></EmojiSquare>
         );
       })}

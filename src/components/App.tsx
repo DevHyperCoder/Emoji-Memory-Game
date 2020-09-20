@@ -1,55 +1,78 @@
+// React
 import React, { useState } from "react";
+
+// CSS
 import "./App.css";
+
+// Types
 import { IEmojiSquare } from "./EmojiSquare";
+
+// Components
 import SquareList from "./SquareList";
 
+// Helpers
+import {getEmojiList} from './EmojiListHelper'
+
+// App component
 function App() {
-  const [emojis, setEmojis] = useState<IEmojiSquare[]>(getEmojiList(2));
+  // State
+  const [emojis, setEmojis] = useState<IEmojiSquare[]>(getEmojiList(3));
+  const [count, setCount] = useState(0);
+
+  // onClick listener
+  const onc = (
+    event: React.MouseEvent<HTMLHeadingElement, MouseEvent>
+  ):
+    | ((event: React.MouseEvent<HTMLHeadingElement, MouseEvent>) => void)
+    | undefined => {
+
+    if (count >= 2) {
+      setTimeout(() => {
+        setCount(0);
+      }, 1000);
+      return undefined;
+    }
+    const elem = event.target as HTMLHeadingElement;
+    const id = Number(elem.id);
+    const newState: IEmojiSquare[] = [
+      ...emojis.slice(0, id),
+      {
+        ...emojis[id],
+        hidden: false,
+      },
+      ...emojis.slice(id + 1),
+    ];
+    setEmojis(newState);
+
+    //Now do checks
+    let counmt = 0;
+    const all_emojis = emojis.slice();
+    all_emojis.forEach((e) => {
+      if (!e.hidden) {
+        counmt++;
+      }
+    });
+
+    if (counmt >= 4) {
+      console.log("WON");
+    }
+
+    return undefined;
+  };
+
+  const squareListProps = {
+    onClick: onc,
+    emojis: emojis,
+  };
 
   return (
     <div>
       <h1>Emoji Memory Game</h1>
-      <SquareList emojis={emojis}></SquareList>
+      <SquareList {...squareListProps}></SquareList>
     </div>
   );
 }
 
-// HERE i need the state mutation
-const onc = (
-  event: React.MouseEvent<HTMLHeadingElement, MouseEvent>
-):
-  | ((event: React.MouseEvent<HTMLHeadingElement, MouseEvent>) => void)
-  | undefined =>{
 
-  const elem = event.target as HTMLHeadingElement;
-  const id = Number(elem.id);
-  
-  const newState:IEmojiSquare[] = [
-    ...emojis.slice(0,id),
-    {
-      ...emojis[id],
-      hidden:true
-    },
-    ...emojis.slice(id+1)
-  ]
-  // i can not access it
-  setEmojis(newState)
-  return undefined;
-}
-
-
-function getEmoji(i: number): string {
-  const emojiList = ["😻", "🐇", "😋", "🤔", "🧮"];
-  return emojiList[i];
-}
-
-function getEmojiList(n: number): IEmojiSquare[] {
-  let array: IEmojiSquare[] = [];
-  array.push({ value: getEmoji(0), hidden: false, onClick: onc, id: "0" });
-  array.push({ value: getEmoji(1), hidden: false, onClick: onc, id: "1" });
-  array.push({ value: getEmoji(0), hidden: false, onClick: onc, id: "2" });
-  array.push({ value: getEmoji(1), hidden: false, onClick: onc, id: "3" });
-  return array;
-}
 
 export default App;

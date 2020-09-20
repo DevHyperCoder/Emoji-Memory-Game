@@ -3,19 +3,14 @@ import "./EmojiSquare.css";
 
 export type IEmojiSquare = {
   value: string;
-  onClick: (
-    event: React.MouseEvent<HTMLHeadingElement, MouseEvent>
-  ) =>
-    | ((event: React.MouseEvent<HTMLHeadingElement, MouseEvent>) => void)
-    | undefined;
+  onClick?:any
   hidden: boolean;
   id: string;
 };
-
-const EmojiSquare = ({ value, onClick, hidden, id }: IEmojiSquare) => {
+const EmojiSquare = ({emoji:{value,id,hidden},onClick}:{emoji:IEmojiSquare,onClick:(e:any)=>any}) => {
   return (
     <h1 className="emoji-square" id={id} onClick={onClick}>
-      {hidden ? "" : value}
+      {hidden ? 'H' : value}
     </h1>
   );
 };
