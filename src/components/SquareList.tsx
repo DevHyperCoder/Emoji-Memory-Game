@@ -1,18 +1,26 @@
-import React from 'react';
-import EmojiSquare from './EmojiSquare';
+import React from "react";
+import EmojiSquare, { IEmojiSquare } from "./EmojiSquare";
 
-const SquareList = ({emojis}:{emojis:string[]}) =>{
-return (
+export type ISquareList = {
+  emojis: IEmojiSquare[];
+};
+
+const SquareList = ({ emojis }: ISquareList) => {
+  return (
     <>
-        {
-            emojis.map((emoji,index)=>{
-                return <EmojiSquare value={emoji} key={index}></EmojiSquare>
-            })
-        }
-    </>    
+      {emojis.map((emoji, index) => {
+        return (
+          <EmojiSquare
+            value={emoji.value}
+            key={index}
+            hidden={emoji.hidden}
+            onClick={emoji.onClick}
+            id={emoji.id}
+          ></EmojiSquare>
+        );
+      })}
+    </>
+  );
+};
 
-    // <EmojiSquare value="😻"></EmojiSquare>
-)
-}
-
-export default SquareList
+export default SquareList;
